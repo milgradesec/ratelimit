@@ -9,7 +9,6 @@ import (
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/metrics"
 	"github.com/patrickmn/go-cache"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 func init() {
@@ -17,30 +16,25 @@ func init() {
 }
 
 func setup(c *caddy.Controller) error {
-	p, err := parseRatelimit(c)
+	p, err := parseConfig(c)
 	if err != nil {
 		return plugin.Error("ratelimit", err)
 	}
+
+	c.OnStartup(func() error {
+		metrics.MustRegister(c, Ratelimited)
+		return nil
+	})
 
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
 		p.Next = next
 		return p
 	})
 
-	c.OnStartup(func() error {
-		m := dnsserver.GetConfig(c).Handler("prometheus")
-		if m == nil {
-			return nil
-		}
-		if x, ok := m.(*metrics.Metrics); ok {
-			x.MustRegister(ratelimited)
-		}
-		return nil
-	})
 	return nil
 }
 
-func parseRatelimit(c *caddy.Controller) (*RateLimit, error) {
+func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 	r := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),
@@ -70,12 +64,3 @@ func parseRatelimit(c *caddy.Controller) (*RateLimit, error) {
 	}
 	return r, nil
 }
-
-var (
-	ratelimited = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Namespace: plugin.Namespace,
-		Subsystem: "ratelimit",
-		Name:      "dropped_total",
-		Help:      "Count of requests that have been dropped because of rate limit.",
-	}, []string{"server"})
-)

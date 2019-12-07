@@ -10,55 +10,47 @@ import (
 	"github.com/miekg/dns"
 )
 
-func TestSetup(t *testing.T) {
-	for i, testcase := range []struct {
-		config  string
-		failing bool
-	}{
-		{`ratelimit`, false},
-		{`ratelimit 100`, false},
-		{`ratelimit { 
-					whitelist 127.0.0.1
-				}`, false},
-		{`ratelimit 50 {
-					whitelist 127.0.0.1 176.103.130.130
-				}`, false},
-		{`ratelimit error`, true},
-	} {
-		c := caddy.NewTestController("dns", testcase.config)
-		err := setup(c)
-		if err != nil {
-			if !testcase.failing {
-				t.Fatalf("Test #%d expected no errors, but got: %v", i, err)
-			}
-			continue
-		}
-		if testcase.failing {
-			t.Fatalf("Test #%d expected to fail but it didn't", i)
-		}
-	}
-}
-
 func Test_ServeDNS(t *testing.T) {
-	c := caddy.NewTestController("dns", `ratelimit`)
-	plugin, err := parseRatelimit(c)
+	c := caddy.NewTestController("dns", `ratelimit 1 {
+		whitelist 127.0.0.1
+		}`)
+
+	rl, err := parseConfig(c)
 	if err != nil {
-		t.Fatal("Failed to initialize the plugin")
+		t.Fatal(err)
 	}
-	plugin.Next = test.ErrorHandler()
+	rl.Next = test.NextHandler(dns.RcodeSuccess, nil)
 
 	rec := dnstest.NewRecorder(&test.ResponseWriter{})
-	req := new(dns.Msg)
-	req.SetQuestion("example.org", dns.TypeA)
+	m := new(dns.Msg)
+	m.SetQuestion("example.org", dns.TypeA)
 
-	_, err = plugin.ServeDNS(context.TODO(), rec, req)
+	rcode, err := rl.ServeDNS(context.TODO(), rec, m)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
+	}
+	if rcode != dns.RcodeSuccess {
+		t.Fatal("First request must have been allowed")
+	}
+
+	rcode, err = rl.ServeDNS(context.TODO(), rec, m)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rcode != dns.RcodeRefused {
+		t.Fatal("Second request must have been refused")
+	}
+
+	badrec := dnstest.NewRecorder(&test.ResponseWriter{RemoteIP: "192.168.1.256"})
+	_, err = rl.ServeDNS(context.TODO(), badrec, m)
+	if err == nil {
+		t.Fatal("Expected error: invalid ip")
 	}
 }
-func TestRatelimiting(t *testing.T) {
+
+/*func TestRatelimiting(t *testing.T) {
 	c := caddy.NewTestController("dns", `ratelimit 1`)
-	plugin, err := parseRatelimit(c)
+	plugin, err := parseConfig(c)
 	if err != nil {
 		t.Fatal("Failed to initialize the plugin")
 	}
@@ -72,13 +64,13 @@ func TestRatelimiting(t *testing.T) {
 	if err != nil || allowed {
 		t.Fatal("Second request must have been ratelimited")
 	}
-}
+}*/
 
 func TestWhitelist(t *testing.T) {
 	c := caddy.NewTestController("dns", `ratelimit 1 { 
 								whitelist 127.0.0.2 127.0.0.1 127.0.0.125 
 								}`)
-	plugin, err := parseRatelimit(c)
+	plugin, err := parseConfig(c)
 	if err != nil {
 		t.Fatal("Failed to initialize the plugin")
 	}

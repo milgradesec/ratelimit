@@ -10,10 +10,13 @@ import (
 
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/metrics"
-	"github.com/coredns/coredns/plugin/pkg/dnstest"
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
 	"golang.org/x/net/context"
+)
+
+const (
+	defaultRatelimit = 50
 )
 
 type RateLimit struct {
@@ -23,11 +26,6 @@ type RateLimit struct {
 	whitelist map[string]bool
 	bucket    *cache.Cache
 }
-
-const (
-	defaultRatelimit    = 50
-	defaultResponseSize = 1024
-)
 
 func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
@@ -39,26 +37,18 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 	}
 	if !allow {
 		server := metrics.WithServer(ctx)
-		ratelimited.WithLabelValues(server).Inc()
+		Ratelimited.WithLabelValues(server).Inc()
 		return dns.RcodeRefused, nil
 	}
 
-	rw := dnstest.NewRecorder(w)
-	rcode, err := plugin.NextOrFailure(rl.Name(), rl.Next, ctx, rw, r)
-
-	size := rw.Len
-	if size > defaultResponseSize && state.Proto() == "udp" {
-		for i := 0; i < size/defaultResponseSize; i++ {
-			_, err = rl.allowRequest(ip)
-			if err != nil {
-				return dns.RcodeServerFailure, err
-			}
-		}
-	}
-	return rcode, err
+	return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 }
 
 func (rl *RateLimit) allowRequest(ip string) (bool, error) {
+	if ip == "" {
+		return false, errors.New("invalid empty ip")
+	}
+
 	if strings.HasPrefix(ip, "192.168.1.") {
 		return true, nil
 	}
