@@ -48,55 +48,37 @@ func Test_ServeDNS(t *testing.T) {
 	}
 }
 
-/*func TestRatelimiting(t *testing.T) {
-	c := caddy.NewTestController("dns", `ratelimit 1`)
-	plugin, err := parseConfig(c)
-	if err != nil {
-		t.Fatal("Failed to initialize the plugin")
-	}
-
-	allowed, err := plugin.allowRequest("127.0.0.1")
-	if err != nil || !allowed {
-		t.Fatal("First request must have been allowed")
-	}
-
-	allowed, err = plugin.allowRequest("127.0.0.1")
-	if err != nil || allowed {
-		t.Fatal("Second request must have been ratelimited")
-	}
-}*/
-
 func TestWhitelist(t *testing.T) {
 	c := caddy.NewTestController("dns", `ratelimit 1 { 
-								whitelist 127.0.0.2 127.0.0.1 127.0.0.125 
-								}`)
-	plugin, err := parseConfig(c)
+		whitelist 127.0.0.2 127.0.0.1 127.0.0.125 
+		}`)
+	rl, err := parseConfig(c)
 	if err != nil {
 		t.Fatal("Failed to initialize the plugin")
 	}
 
-	allowed, err := plugin.allowRequest("127.0.0.1")
+	allowed, err := rl.allowRequest("127.0.0.1")
 	if err != nil || !allowed {
 		t.Fatal("First request must have been allowed")
 	}
 
-	allowed, err = plugin.allowRequest("127.0.0.1")
+	allowed, err = rl.allowRequest("127.0.0.1")
 	if err != nil || !allowed {
 		t.Fatal("Second request must have been allowed due to whitelist")
 	}
 
-	allowed, err = plugin.allowRequest("76.42.18.23")
+	allowed, err = rl.allowRequest("76.42.18.23")
 	if err != nil || !allowed {
 		t.Fatal("First request must have been allowed")
 	}
 
-	allowed, err = plugin.allowRequest("76.42.18.23")
+	allowed, err = rl.allowRequest("76.42.18.23")
 	if err != nil || allowed {
 		t.Fatal("Second request must have been blocked")
 	}
 
 	for i := 0; i < 10; i++ {
-		allowed, err := plugin.allowRequest("192.168.1.171")
+		allowed, err := rl.allowRequest("192.168.1.171")
 		if err != nil || !allowed {
 			t.Fatal("First request must have been allowed")
 		}

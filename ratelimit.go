@@ -37,7 +37,7 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 	}
 	if !allow {
 		server := metrics.WithServer(ctx)
-		Ratelimited.WithLabelValues(server).Inc()
+		LimitedCount.WithLabelValues(server).Inc()
 		return dns.RcodeRefused, nil
 	}
 
