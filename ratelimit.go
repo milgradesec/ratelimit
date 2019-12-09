@@ -44,6 +44,10 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 	return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 }
 
+func (rl *RateLimit) Name() string {
+	return "ratelimit"
+}
+
 func (rl *RateLimit) allowRequest(ip string) (bool, error) {
 	if ip == "" {
 		return false, errors.New("invalid empty ip")
@@ -73,8 +77,4 @@ func (rl *RateLimit) allowRequest(ip string) (bool, error) {
 
 	allow, _ := token.Try()
 	return allow, nil
-}
-
-func (rl *RateLimit) Name() string {
-	return "ratelimit"
 }
