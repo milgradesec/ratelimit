@@ -28,10 +28,13 @@ type RateLimit struct {
 }
 
 func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
-	state := request.Request{W: w, Req: r}
-	ip := state.IP()
+	if len(r.Question) != 1 {
+		return dns.RcodeFormatError, errors.New("DNS request with multiple questions")
+	}
 
-	allow, err := rl.allowRequest(ip)
+	state := request.Request{W: w, Req: r}
+
+	allow, err := rl.allowRequest(state.IP())
 	if err != nil {
 		return dns.RcodeServerFailure, err
 	}
