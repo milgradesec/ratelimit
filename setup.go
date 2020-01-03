@@ -22,7 +22,7 @@ func setup(c *caddy.Controller) error {
 	}
 
 	c.OnStartup(func() error {
-		metrics.MustRegister(c, LimitedCount)
+		metrics.MustRegister(c, RateLimitCount)
 		return nil
 	})
 

@@ -28,18 +28,17 @@ type RateLimit struct {
 }
 
 func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
-	if len(r.Question) != 1 {
-		return dns.RcodeFormatError, errors.New("DNS request with multiple questions")
+	state := request.Request{W: w, Req: r}
+	if state.Proto() == "tcp" {
+		return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 	}
 
-	state := request.Request{W: w, Req: r}
-
-	allow, err := rl.allowRequest(state.IP())
+	allow, err := rl.check(state.IP())
 	if err != nil {
 		return dns.RcodeServerFailure, err
 	}
 	if !allow {
-		LimitedCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
+		RateLimitCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
 		return dns.RcodeRefused, nil
 	}
 
@@ -50,7 +49,7 @@ func (rl *RateLimit) Name() string {
 	return "ratelimit"
 }
 
-func (rl *RateLimit) allowRequest(ip string) (bool, error) {
+func (rl *RateLimit) check(ip string) (bool, error) {
 	if ip == "" {
 		return false, errors.New("invalid empty ip")
 	}

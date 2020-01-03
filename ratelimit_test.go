@@ -57,28 +57,28 @@ func TestWhitelist(t *testing.T) {
 		t.Fatal("Failed to initialize the plugin")
 	}
 
-	allowed, err := rl.allowRequest("127.0.0.1")
+	allowed, err := rl.check("127.0.0.1")
 	if err != nil || !allowed {
 		t.Fatal("First request must have been allowed")
 	}
 
-	allowed, err = rl.allowRequest("127.0.0.1")
+	allowed, err = rl.check("127.0.0.1")
 	if err != nil || !allowed {
 		t.Fatal("Second request must have been allowed due to whitelist")
 	}
 
-	allowed, err = rl.allowRequest("76.42.18.23")
+	allowed, err = rl.check("76.42.18.23")
 	if err != nil || !allowed {
 		t.Fatal("First request must have been allowed")
 	}
 
-	allowed, err = rl.allowRequest("76.42.18.23")
+	allowed, err = rl.check("76.42.18.23")
 	if err != nil || allowed {
 		t.Fatal("Second request must have been blocked")
 	}
 
 	for i := 0; i < 10; i++ {
-		allowed, err := rl.allowRequest("192.168.1.171")
+		allowed, err := rl.check("192.168.1.171")
 		if err != nil || !allowed {
 			t.Fatal("First request must have been allowed")
 		}
