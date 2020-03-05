@@ -1,6 +1,6 @@
 module github.com/milgradesec/ratelimit
 
-go 1.13
+go 1.14
 
 require (
 	github.com/beefsack/go-rate v0.0.0-20180408011153-efa7637bb9b6
@@ -9,5 +9,5 @@ require (
 	github.com/miekg/dns v1.1.27
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.5.0
-	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
+	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 )
