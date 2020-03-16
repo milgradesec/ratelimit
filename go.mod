@@ -8,6 +8,6 @@ require (
 	github.com/coredns/coredns v1.6.7
 	github.com/miekg/dns v1.1.28
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/prometheus/client_golang v1.5.0
+	github.com/prometheus/client_golang v1.5.1
 	golang.org/x/net v0.0.0-20200301022130-244492dfa37a
 )
