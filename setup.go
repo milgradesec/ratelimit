@@ -11,14 +11,16 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
+const pluginName = "ratelimit"
+
 func init() {
-	plugin.Register("ratelimit", setup)
+	plugin.Register(pluginName, setup)
 }
 
 func setup(c *caddy.Controller) error {
 	p, err := parseConfig(c)
 	if err != nil {
-		return plugin.Error("ratelimit", err)
+		return plugin.Error(pluginName, err)
 	}
 
 	c.OnStartup(func() error {
