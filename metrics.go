@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	RateLimitCount = prometheus.NewCounterVec(prometheus.CounterOpts{
+	RequestsDroppedCount = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: plugin.Namespace,
 		Subsystem: pluginName,
 		Name:      "dropped_request_total",
