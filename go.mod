@@ -9,5 +9,5 @@ require (
 	github.com/miekg/dns v1.1.29
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.6.0
-	golang.org/x/net v0.0.0-20200425230154-ff2c4b7c35a0
+	golang.org/x/net v0.0.0-20200501053045-e0ff5e5a1de5
 )
