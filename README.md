@@ -1,5 +1,8 @@
 # ratelimit
 
+[![Build Status](https://img.shields.io/travis/milgradesec/ratelimit/master.svg?label=build)](https://travis-ci.org/milgradesec/ratelimit)
+[![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
+
 ## Name
 
 *ratelimit* - enables response rate limiting to mitigate DNS attacks.
