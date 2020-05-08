@@ -23,14 +23,14 @@ func setup(c *caddy.Controller) error {
 		return plugin.Error(pluginName, err)
 	}
 
-	c.OnStartup(func() error {
-		metrics.MustRegister(c, RequestsDroppedCount)
-		return nil
-	})
-
 	dnsserver.GetConfig(c).AddPlugin(func(next plugin.Handler) plugin.Handler {
 		p.Next = next
 		return p
+	})
+
+	c.OnStartup(func() error {
+		metrics.MustRegister(c, DropCount)
+		return nil
 	})
 
 	return nil

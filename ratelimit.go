@@ -38,7 +38,7 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 		return dns.RcodeServerFailure, err
 	}
 	if !allow {
-		RequestsDroppedCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
+		DropCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
 		return dns.RcodeRefused, nil
 	}
 
