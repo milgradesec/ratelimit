@@ -29,6 +29,7 @@ type RateLimit struct {
 
 func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
+
 	if state.Proto() == "tcp" {
 		return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 	}
@@ -37,6 +38,7 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 	if err != nil {
 		return dns.RcodeServerFailure, err
 	}
+
 	if !allow {
 		DropCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
 		return dns.RcodeRefused, nil
@@ -71,8 +73,8 @@ func (rl *RateLimit) check(ip string) (bool, error) {
 		}
 	}
 
-	token, check := cached.(*rate.RateLimiter)
-	if !check {
+	token, ok := cached.(*rate.RateLimiter)
+	if !ok {
 		return true, errors.New("cache error: type mismatch")
 	}
 

@@ -13,6 +13,7 @@ import (
 
 const pluginName = "ratelimit"
 
+//nolint
 func init() {
 	plugin.Register(pluginName, setup)
 }
@@ -61,6 +62,9 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 				for _, ip := range whitelist {
 					r.whitelist[ip] = true
 				}
+
+			default:
+				return nil, c.ArgErr()
 			}
 		}
 	}

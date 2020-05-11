@@ -2,6 +2,8 @@
 
 [![Build Status](https://img.shields.io/travis/milgradesec/ratelimit/master.svg?label=build)](https://travis-ci.org/milgradesec/ratelimit)
 [![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
+[![Code Coverage](https://img.shields.io/codecov/c/github/milgradesec/ratelimit/master.svg)](https://codecov.io/github/milgradesec/ratelimit?branch=master)
+[![Docs](https://godoc.org/github.com/milgradesec/ratelimit?status.svg)](https://pkg.go.dev/github.com/milgradesec/ratelimit)
 
 ## Name
 
