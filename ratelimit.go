@@ -52,10 +52,6 @@ func (rl *RateLimit) Name() string {
 }
 
 func (rl *RateLimit) check(ip string) (bool, error) {
-	if ip == "" {
-		return false, errors.New("invalid empty ip")
-	}
-
 	if strings.HasPrefix(ip, "192.168.1.") {
 		return true, nil
 	}
