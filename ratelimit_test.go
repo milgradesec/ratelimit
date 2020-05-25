@@ -40,12 +40,6 @@ func Test_ServeDNS(t *testing.T) {
 	if rcode != dns.RcodeRefused {
 		t.Fatal("Second request must have been refused")
 	}
-
-	badrec := dnstest.NewRecorder(&test.ResponseWriter{RemoteIP: "192.168.1.256"})
-	_, err = rl.ServeDNS(context.TODO(), badrec, m)
-	if err == nil {
-		t.Fatal("Expected error: invalid ip")
-	}
 }
 
 func TestWhitelist(t *testing.T) {
