@@ -4,13 +4,9 @@
 [![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
 [![Code Coverage](https://img.shields.io/codecov/c/github/milgradesec/ratelimit/master.svg)](https://codecov.io/github/milgradesec/ratelimit?branch=master)
 
-## Name
-
-_ratelimit_ - enables response rate limiting to mitigate DNS attacks.
-
 ## Description
 
-The _ratelimit_ plugin enables response rate limiting based on a maximun number of requests allowed per second.
+The _ratelimit_ plugin enables response rate limiting to mitigate DNS attacks.
 
 ## Syntax
 
