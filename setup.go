@@ -41,7 +41,7 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 	r := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),
-		bucket:    cache.New(time.Hour, time.Hour),
+		bucket:    cache.New(defaultTimeWindow, time.Hour),
 	}
 
 	for c.Next() {

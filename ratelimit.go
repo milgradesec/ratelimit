@@ -16,9 +16,12 @@ import (
 )
 
 const (
-	defaultRatelimit = 50
+	defaultRatelimit  = 50
+	defaultTimeWindow = 15 * time.Second
 )
 
+// RateLimit is a plugin that implements response rate limiting
+// using a token bucket algorithm.
 type RateLimit struct {
 	Next plugin.Handler
 
@@ -27,10 +30,13 @@ type RateLimit struct {
 	bucket    *cache.Cache
 }
 
+// ServeDNS implements the plugin.Handler interface.
 func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
 
 	if state.Proto() == "tcp" {
+		// No ratelimit is applied for TCP clients,
+		// pass the request to the next plugin.
 		return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 	}
 
@@ -47,6 +53,7 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 	return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 }
 
+// Name implements the plugin.Handler interface.
 func (rl *RateLimit) Name() string {
 	return "ratelimit"
 }
@@ -62,7 +69,7 @@ func (rl *RateLimit) check(ip string) (bool, error) {
 
 	cached, found := rl.bucket.Get(ip)
 	if !found {
-		rl.bucket.Set(ip, rate.New(rl.limit, time.Second), time.Hour)
+		rl.bucket.Set(ip, rate.New(rl.limit, time.Second), cache.DefaultExpiration)
 		cached, found = rl.bucket.Get(ip)
 		if !found {
 			return true, errors.New("cache error: just inserted item disappeared")
