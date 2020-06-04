@@ -37,7 +37,7 @@ func setup(c *caddy.Controller) error {
 }
 
 func parseConfig(c *caddy.Controller) (*RateLimit, error) {
-	r := &RateLimit{
+	rl := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),
 		bucket:    cache.New(defaultTimeWindow, defaultPurgeInterval),
@@ -51,7 +51,7 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 			if err != nil {
 				return nil, c.ArgErr()
 			}
-			r.limit = ratelimit
+			rl.limit = ratelimit
 		}
 
 		for c.NextBlock() {
@@ -59,7 +59,7 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 			case "whitelist":
 				whitelist := c.RemainingArgs()
 				for _, ip := range whitelist {
-					r.whitelist[ip] = true
+					rl.whitelist[ip] = true
 				}
 
 			default:
@@ -67,5 +67,5 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 			}
 		}
 	}
-	return r, nil
+	return rl, nil
 }
