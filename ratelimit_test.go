@@ -70,11 +70,4 @@ func TestWhitelist(t *testing.T) {
 	if err != nil || allowed {
 		t.Fatal("Second request must have been blocked")
 	}
-
-	for i := 0; i < 10; i++ {
-		allowed, err := rl.check("192.168.1.171")
-		if err != nil || !allowed {
-			t.Fatal("First request must have been allowed")
-		}
-	}
 }

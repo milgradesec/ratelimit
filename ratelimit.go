@@ -2,7 +2,6 @@ package ratelimit
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"github.com/beefsack/go-rate"
@@ -13,11 +12,6 @@ import (
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
 	"golang.org/x/net/context"
-)
-
-const (
-	defaultRatelimit  = 50
-	defaultTimeWindow = 15 * time.Second
 )
 
 // RateLimit is a plugin that implements response rate limiting
@@ -45,12 +39,12 @@ func (rl *RateLimit) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.
 		return dns.RcodeServerFailure, err
 	}
 
-	if !allow {
-		DropCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
-		return dns.RcodeRefused, nil
+	if allow {
+		return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
 	}
 
-	return plugin.NextOrFailure(rl.Name(), rl.Next, ctx, w, r)
+	DropCount.WithLabelValues(metrics.WithServer(ctx)).Inc()
+	return dns.RcodeRefused, nil
 }
 
 // Name implements the plugin.Handler interface.
@@ -58,25 +52,20 @@ func (rl *RateLimit) Name() string {
 	return "ratelimit"
 }
 
+// check determines if an ip has surpassed the limit and the request
+// has to be refused, otherwise the rate limiter is increased.
 func (rl *RateLimit) check(ip string) (bool, error) {
-	if strings.HasPrefix(ip, "192.168.1.") {
-		return true, nil
-	}
-
 	if rl.whitelist[ip] {
 		return true, nil
 	}
 
-	cached, found := rl.bucket.Get(ip)
+	item, found := rl.bucket.Get(ip)
 	if !found {
 		rl.bucket.Set(ip, rate.New(rl.limit, time.Second), cache.DefaultExpiration)
-		cached, found = rl.bucket.Get(ip)
-		if !found {
-			return true, errors.New("cache error: just inserted item disappeared")
-		}
+		item, _ = rl.bucket.Get(ip)
 	}
 
-	token, ok := cached.(*rate.RateLimiter)
+	token, ok := item.(*rate.RateLimiter)
 	if !ok {
 		return true, errors.New("cache error: type mismatch")
 	}
@@ -84,3 +73,9 @@ func (rl *RateLimit) check(ip string) (bool, error) {
 	allow, _ := token.Try()
 	return allow, nil
 }
+
+const (
+	defaultRatelimit     = 50
+	defaultTimeWindow    = 15 * time.Second
+	defaultPurgeInterval = 10 * time.Minute
+)

@@ -68,8 +68,6 @@ linters:
     - goconst
     - gocritic
     - gocyclo
-    #    - gofmt
-    #    - goimports
     - golint
     - gomnd
     - goprintffuncname
@@ -93,18 +91,20 @@ linters:
     - unused
     - varcheck
     - whitespace
+    - godot
+    - godox
+    - prealloc
+    - maligned
 
   # don't enable:
   # - asciicheck
   # - gochecknoglobals
   # - gocognit
-  # - godot
-  # - godox
   # - goerr113
-  # - maligned
   # - nestif
-  # - prealloc
   # - testpackage
+  # - gofmt
+  # - goimports
   # - wsl
 
 issues:

@@ -2,7 +2,6 @@ package ratelimit
 
 import (
 	"strconv"
-	"time"
 
 	"github.com/caddyserver/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
@@ -41,7 +40,7 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 	r := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),
-		bucket:    cache.New(defaultTimeWindow, time.Hour),
+		bucket:    cache.New(defaultTimeWindow, defaultPurgeInterval),
 	}
 
 	for c.Next() {
