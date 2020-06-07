@@ -64,7 +64,6 @@ linters:
     - dupl
     - errcheck
     - funlen
-    - gochecknoinits
     - goconst
     - gocritic
     - gocyclo
@@ -95,17 +94,6 @@ linters:
     - godox
     - prealloc
     - maligned
-
-  # don't enable:
-  # - asciicheck
-  # - gochecknoglobals
-  # - gocognit
-  # - goerr113
-  # - nestif
-  # - testpackage
-  # - gofmt
-  # - goimports
-  # - wsl
 
 issues:
   # Excluding configuration per-path, per-linter, per-text and per-source

@@ -21,7 +21,7 @@ type RateLimit struct {
 
 	limit     int
 	whitelist map[string]bool
-	bucket    *cache.Cache
+	buckets   *cache.Cache
 }
 
 // ServeDNS implements the plugin.Handler interface.
@@ -59,10 +59,10 @@ func (rl *RateLimit) check(ip string) (bool, error) {
 		return true, nil
 	}
 
-	item, found := rl.bucket.Get(ip)
+	item, found := rl.buckets.Get(ip)
 	if !found {
-		rl.bucket.Set(ip, rate.New(rl.limit, time.Second), cache.DefaultExpiration)
-		item, _ = rl.bucket.Get(ip)
+		rl.buckets.Set(ip, rate.New(rl.limit, time.Second), cache.DefaultExpiration)
+		item, _ = rl.buckets.Get(ip)
 	}
 
 	token, ok := item.(*rate.RateLimiter)

@@ -1,6 +1,6 @@
 # ratelimit
 
-[![Build Status](https://img.shields.io/travis/milgradesec/ratelimit/master.svg?label=build)](https://travis-ci.org/milgradesec/ratelimit)
+![CI](https://github.com/milgradesec/ratelimit/workflows/CI/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
 [![Code Coverage](https://img.shields.io/codecov/c/github/milgradesec/ratelimit/master.svg)](https://codecov.io/github/milgradesec/ratelimit?branch=master)
 

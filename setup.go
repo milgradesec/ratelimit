@@ -12,7 +12,6 @@ import (
 
 const pluginName = "ratelimit"
 
-//nolint
 func init() {
 	plugin.Register(pluginName, setup)
 }
@@ -40,7 +39,7 @@ func parseConfig(c *caddy.Controller) (*RateLimit, error) {
 	rl := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),
-		bucket:    cache.New(defaultTimeWindow, defaultPurgeInterval),
+		buckets:   cache.New(defaultTimeWindow, defaultPurgeInterval),
 	}
 
 	for c.Next() {
