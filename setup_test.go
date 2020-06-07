@@ -12,17 +12,10 @@ func TestSetup(t *testing.T) {
 		failing bool
 	}{
 		{`ratelimit`, false},
-
 		{`ratelimit 100`, false},
-
-		{`ratelimit { 
-					whitelist 127.0.0.1
-				}`, false},
-
 		{`ratelimit 50 {
 					whitelist 127.0.0.1 176.103.130.130
 				}`, false},
-
 		{`ratelimit error`, true},
 	} {
 		c := caddy.NewTestController("dns", test.config)
