@@ -1,17 +1,16 @@
 package ratelimit
 
 import (
+	"context"
 	"errors"
 	"time"
 
 	"github.com/beefsack/go-rate"
-	"github.com/patrickmn/go-cache"
-
 	"github.com/coredns/coredns/plugin"
 	"github.com/coredns/coredns/plugin/metrics"
 	"github.com/coredns/coredns/request"
 	"github.com/miekg/dns"
-	"golang.org/x/net/context"
+	"github.com/patrickmn/go-cache"
 )
 
 // RateLimit is a plugin that implements response rate limiting
