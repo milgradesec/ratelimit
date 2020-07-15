@@ -1,8 +1,8 @@
 # ratelimit
 
 ![CI](https://github.com/milgradesec/ratelimit/workflows/CI/badge.svg)
-[![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
 [![codecov](https://codecov.io/gh/milgradesec/ratelimit/branch/master/graph/badge.svg)](https://codecov.io/gh/milgradesec/ratelimit)
+[![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
 
 ## Description
 
