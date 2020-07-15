@@ -1,39 +1,4 @@
-# golangci.com configuration
-# https://github.com/golangci/golangci/wiki/Configuration
-linters-settings:
-  dupl:
-    threshold: 100
-  funlen:
-    lines: 100
-    statements: 50
-  goconst:
-    min-len: 2
-    min-occurrences: 2
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-      - dupImport # https://github.com/go-critic/go-critic/issues/845
-      - ifElseChain
-      - octalLiteral
-      - whyNoLint
-      - wrapperFunc
-  gocyclo:
-    min-complexity: 15
-  goimports:
-    local-prefixes: github.com/milgradesec/ratelimit
-  golint:
-    min-confidence: 0
-  lll:
-    line-length: 140
-  maligned:
-    suggest-new: true
-  misspell:
-    locale: US
+# https://golangci-lint.run/usage/configuration/
 
 linters:
   disable-all: true
@@ -75,3 +40,7 @@ linters:
     - godox
     - prealloc
     - maligned
+
+run:
+  skip-dirs:
+    - test
