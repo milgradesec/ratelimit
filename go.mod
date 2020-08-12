@@ -1,6 +1,6 @@
 module github.com/milgradesec/ratelimit
 
-go 1.14
+go 1.15
 
 require (
 	github.com/beefsack/go-rate v0.0.0-20180408011153-efa7637bb9b6
