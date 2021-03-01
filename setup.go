@@ -16,7 +16,7 @@ func init() {
 }
 
 func setup(c *caddy.Controller) error {
-	p, err := parseConfig(c)
+	p, err := parseRatelimit(c)
 	if err != nil {
 		return plugin.Error(pluginName, err)
 	}
@@ -25,11 +25,10 @@ func setup(c *caddy.Controller) error {
 		p.Next = next
 		return p
 	})
-
 	return nil
 }
 
-func parseConfig(c *caddy.Controller) (*RateLimit, error) {
+func parseRatelimit(c *caddy.Controller) (*RateLimit, error) {
 	rl := &RateLimit{
 		limit:     defaultRatelimit,
 		whitelist: make(map[string]bool),

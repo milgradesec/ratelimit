@@ -15,7 +15,7 @@ func Test_ServeDNS(t *testing.T) {
 		whitelist 127.0.0.1
 		}`)
 
-	rl, err := parseConfig(c)
+	rl, err := parseRatelimit(c)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +46,7 @@ func TestWhitelist(t *testing.T) {
 	c := caddy.NewTestController("dns", `ratelimit 1 { 
 		whitelist 127.0.0.2 127.0.0.1 127.0.0.125 
 		}`)
-	rl, err := parseConfig(c)
+	rl, err := parseRatelimit(c)
 	if err != nil {
 		t.Fatal("Failed to initialize the plugin")
 	}
