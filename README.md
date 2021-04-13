@@ -1,6 +1,7 @@
 # ratelimit
 
 ![CI](https://github.com/milgradesec/ratelimit/workflows/CI/badge.svg)
+[![CodeQL](https://github.com/milgradesec/ratelimit/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/milgradesec/ratelimit/actions/workflows/codeql-analysis.yml)
 [![codecov](https://codecov.io/gh/milgradesec/ratelimit/branch/master/graph/badge.svg)](https://codecov.io/gh/milgradesec/ratelimit)
 [![Go Report Card](https://goreportcard.com/badge/milgradesec/ratelimit)](https://goreportcard.com/badge/github.com/milgradesec/ratelimit)
 [![Go Reference](https://pkg.go.dev/badge/github.com/milgradesec/ratelimit.svg)](https://pkg.go.dev/github.com/milgradesec/ratelimit)
