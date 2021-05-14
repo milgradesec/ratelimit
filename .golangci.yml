@@ -14,7 +14,6 @@ linters:
     - gocritic
     - gocyclo
     - golint
-    - gomnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -38,6 +37,8 @@ linters:
     - godox
     - prealloc
     - exportloopref
+    - promlinter
+    - tagliatelle
 
 run:
   skip-dirs:
