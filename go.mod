@@ -6,7 +6,7 @@ require (
 	github.com/beefsack/go-rate v0.0.0-20200827232406-6cde80facd47
 	github.com/coredns/caddy v1.1.1
 	github.com/coredns/coredns v1.10.1
-	github.com/miekg/dns v1.1.53
+	github.com/miekg/dns v1.1.54
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.15.0
 )
