@@ -6,7 +6,7 @@ require (
 	github.com/beefsack/go-rate v0.0.0-20200827232406-6cde80facd47
 	github.com/coredns/caddy v1.1.1
 	github.com/coredns/coredns v1.11.3
-	github.com/miekg/dns v1.1.61
+	github.com/miekg/dns v1.1.62
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.19.1
 )
@@ -31,12 +31,12 @@ require (
 	github.com/quic-go/quic-go v0.42.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	go.uber.org/mock v0.4.0 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
+	golang.org/x/crypto v0.25.0 // indirect
 	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
 	golang.org/x/mod v0.18.0 // indirect
-	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	golang.org/x/tools v0.22.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
