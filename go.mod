@@ -8,7 +8,7 @@ require (
 	github.com/coredns/coredns v1.11.3
 	github.com/miekg/dns v1.1.62
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/prometheus/client_golang v1.20.3
+	github.com/prometheus/client_golang v1.20.4
 )
 
 require (
