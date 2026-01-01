@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	github.com/beefsack/go-rate v0.0.0-20200827232406-6cde80facd47
-	github.com/coredns/caddy v1.1.4-0.20250930002214-15135a999495
+	github.com/coredns/caddy v1.1.4
 	github.com/coredns/coredns v1.13.2
 	github.com/miekg/dns v1.1.69
 	github.com/patrickmn/go-cache v2.1.0+incompatible
